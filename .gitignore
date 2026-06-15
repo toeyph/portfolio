@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# env files — NEVER commit real env files
+.env
+.env.local
+.env.*.local
+
+# TypeScript
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Claude Code session files
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
