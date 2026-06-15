@@ -238,15 +238,10 @@ export default function AdminPanel({ content, onClose, onSave, onPreview }: Admi
 
   const handleLogin = async () => {
     setLoginLoading(true)
-    try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) setErr(error.message + ' | ' + error.status)
-      else setUnlocked(true)
-    } catch (e) {
-      setErr('CATCH: ' + (e instanceof Error ? e.message : String(e)))
-    } finally {
-      setLoginLoading(false)
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    setLoginLoading(false)
+    if (error) setErr(error.message)
+    else setUnlocked(true)
   }
 
   const sortedJSON = (v: unknown): string => JSON.stringify(v, Object.keys(v as object ?? {}).sort())
