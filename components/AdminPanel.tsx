@@ -106,9 +106,39 @@ export default function AdminPanel({ content, onClose, onSave, onPreview }: Admi
     setDraft((d) => ({ ...d, contact: { ...d.contact, [k]: e.target.value } }))
 
   const commit = async () => {
+    // Auto-flush any unsaved Work / Experience form data before persisting
+    let nextDraft = draft
+
+    if (tab === 'Work' && projForm.title.trim()) {
+      const tagsArr = projForm.tags.split(',').map((t) => t.trim()).filter(Boolean)
+      const rec: Project = { ...projForm, tags: tagsArr, id: projForm.id || 'p' + Date.now() }
+      nextDraft = {
+        ...nextDraft,
+        projects: editingProj
+          ? nextDraft.projects.map((p) => (p.id === rec.id ? rec : p))
+          : [rec, ...nextDraft.projects],
+      }
+      setProjForm(emptyProject() as ProjForm)
+      setEditingProj(false)
+      setDraft(nextDraft)
+    }
+
+    if (tab === 'Experience' && expForm.role.trim()) {
+      const rec: Experience = { ...expForm, id: expForm.id || 'e' + Date.now() }
+      nextDraft = {
+        ...nextDraft,
+        experience: editingExp
+          ? nextDraft.experience.map((x) => (x.id === rec.id ? rec : x))
+          : [...nextDraft.experience, rec],
+      }
+      setExpForm(emptyExp())
+      setEditingExp(false)
+      setDraft(nextDraft)
+    }
+
     setIsSaving(true)
     try {
-      await onSave(draft)
+      await onSave(nextDraft)
       setSavedFlash(true)
       setTimeout(() => setSavedFlash(false), 1800)
     } catch (e) {
