@@ -136,6 +136,15 @@ export default function AdminPanel({ content, onClose, onSave, onPreview }: Admi
       setDraft(nextDraft)
     }
 
+    if (tab === 'Skills' && skillInput.trim()) {
+      nextDraft = {
+        ...nextDraft,
+        skills: [...nextDraft.skills, { name: skillInput.trim(), category: skillCategory }],
+      }
+      setSkillInput('')
+      setDraft(nextDraft)
+    }
+
     setIsSaving(true)
     try {
       await onSave(nextDraft)
