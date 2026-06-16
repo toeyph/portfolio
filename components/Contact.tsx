@@ -29,6 +29,7 @@ export default function Contact({ contact }: ContactProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name.trim() || !email.trim() || !message.trim()) return
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return
     setStatus('sending')
     try {
       await sendContactMessage(name.trim(), email.trim(), message.trim())

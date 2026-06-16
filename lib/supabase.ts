@@ -16,7 +16,7 @@ export async function loadContent(): Promise<PortfolioContent | null> {
     const { data, error } = await supabase
       .from('portfolio_content')
       .select('data')
-      .single()
+      .maybeSingle()
     if (error) { console.warn('loadContent:', error.message); return null }
     return (data?.data as PortfolioContent) ?? null
   } catch (e) {
@@ -29,9 +29,9 @@ export async function persistContent(contentData: PortfolioContent): Promise<voi
   const { data: row, error: selectErr } = await supabase
     .from('portfolio_content')
     .select('id')
-    .single()
+    .maybeSingle()
 
-  if (selectErr && selectErr.code !== 'PGRST116') {
+  if (selectErr) {
     throw new Error(`Failed to read content: ${selectErr.message}`)
   }
 
@@ -60,7 +60,7 @@ export async function uploadImage(dataUrl: string, path: string): Promise<string
     const filePath = `${path}-${Date.now()}.${ext}`
     const { error } = await supabase.storage
       .from(STORAGE_BUCKET)
-      .upload(filePath, blob, { upsert: true, contentType: blob.type })
+      .upload(filePath, blob, { contentType: blob.type })
     if (error) { console.warn('uploadImage:', error.message); return dataUrl }
     const { data: pub } = supabase.storage
       .from(STORAGE_BUCKET)
@@ -89,19 +89,22 @@ export async function loadMessages() {
 }
 
 export async function trackPageView(): Promise<void> {
-  try {
-    await supabase.from('page_view_events').insert({})
-  } catch { /* ignore */ }
+  const { error } = await supabase.from('page_view_events').insert({})
+  if (error) console.warn('trackPageView:', error.message)
 }
 
 export async function loadAnalytics(): Promise<{ total: number; thisWeek: number }> {
-  const { count: total } = await supabase
+  const { count: total, error: e1 } = await supabase
     .from('page_view_events')
     .select('*', { count: 'exact', head: true })
+  if (e1) throw new Error(`Analytics error: ${e1.message}`)
+
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-  const { count: thisWeek } = await supabase
+  const { count: thisWeek, error: e2 } = await supabase
     .from('page_view_events')
     .select('*', { count: 'exact', head: true })
     .gte('created_at', weekAgo)
+  if (e2) throw new Error(`Analytics error: ${e2.message}`)
+
   return { total: total ?? 0, thisWeek: thisWeek ?? 0 }
 }

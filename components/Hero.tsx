@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin, ArrowUpRight, Code2, Download } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from './BrandIcons'
@@ -19,17 +18,6 @@ export default function Hero({ profile, contact, projectCount }: HeroProps) {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  // Parallax effect on hero photo
-  useEffect(() => {
-    const onScroll = () => {
-      const photo = document.querySelector('.pf-hero-photo') as HTMLElement | null
-      if (photo) {
-        photo.style.transform = `translateY(${window.scrollY * 0.4}px)`
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   // Split-text animation helpers
   const headline = profile.headline || profile.roles?.[0] || 'Developer'

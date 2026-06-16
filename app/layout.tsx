@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Playfair_Display, Lora, Mulish } from 'next/font/google'
+import { Playfair_Display, Lora, Mulish, Caveat } from 'next/font/google'
 import './globals.css'
 
 const playfair = Playfair_Display({
@@ -22,6 +22,13 @@ const mulish = Mulish({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700', '800'],
   variable: '--font-mulish',
+  display: 'swap',
+})
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-handwrite',
   display: 'swap',
 })
 
@@ -51,7 +58,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${lora.variable} ${mulish.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${lora.variable} ${mulish.variable} ${caveat.variable}`}>
       <body suppressHydrationWarning>{children}</body>
     </html>
   )

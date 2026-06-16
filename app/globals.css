@@ -113,10 +113,10 @@
   max-width: 480px;
 }
 
-/* Full-bleed background photo — extra height for parallax room */
+/* Full-bleed background photo */
 .pf-hero-photo {
-  position: absolute; top: -15%; left: 0; right: 0; z-index: 0;
-  width: 100%; height: 130%;
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
   object-fit: cover; object-position: center center; display: block;
 }
 
@@ -211,6 +211,8 @@
   .pf-sec-dark, .pf-sec-light { padding-left: 16px !important; padding-right: 16px !important }
 
   /* Tech stack film strip */
+  .pf-film-can-v { flex: 0 0 52px }
+  .pf-film-can-v-iso { font-size: 17px }
   .pf-fstrip-slate { flex: 0 0 58px; padding: 18px 10px }
   .pf-fstrip-frame { padding: 18px 18px; min-width: 78px }
   .pf-fstrip-icon svg, .pf-fstrip-icon img { width: 28px; height: 28px }
@@ -289,32 +291,183 @@
 .pf-highlights li { display: flex; gap: 14px; align-items: flex-start; color: var(--muted); font-size: 13.5px; line-height: 1.6 }
 .pf-highlights .dot { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--gold); flex: none; margin-top: 1px }
 
-/* ── Tech Stack — Film Strip ──────────────────────────────── */
+/* ── Tech Stack — Horizontal Film Strip + Canister ──────── */
 .pf-fstrip-list { margin-top: 44px; display: flex; flex-direction: column; gap: 28px }
 
-.pf-fstrip {
-  background: #060402;
+/* Outer wrapper: canister on left + strip on right */
+.pf-fstrip-combo {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   border-radius: 6px;
-  border: 1px solid rgba(255,255,255,.08);
   overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.04);
+  box-shadow: 0 8px 40px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+/* Film canister — redesigned with metallic caps, red stripe, 3D gloss */
+.pf-film-can-v {
+  flex: 0 0 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  border-right: 2px solid #040201;
+  overflow: hidden;
+}
+
+/* Metallic end caps */
+.pf-film-can-v-cap {
+  flex: 0 0 20px;
+  background: linear-gradient(to right,
+    #111 0%, #444 10%, #888 22%, #b4b4b4 38%, #c8c8c8 50%,
+    #b4b4b4 62%, #888 78%, #444 90%, #111 100%
+  );
+  position: relative;
+}
+.pf-film-can-v-cap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,.25) 0%, rgba(255,255,255,.08) 40%,
+    transparent 60%, rgba(0,0,0,.25) 100%
+  );
+}
+.pf-film-can-v-cap:first-child { border-bottom: 1.5px solid #080808 }
+.pf-film-can-v-cap:last-child  { border-top:    1.5px solid #080808 }
+
+/* Yellow label body */
+.pf-film-can-v-label {
+  flex: 1;
+  background: linear-gradient(to right,
+    #a86a00 0%, #d4920a 6%,
+    #f0b820 12%, #ffd040 20%,
+    #ffe060 50%,
+    #ffd040 80%, #f0b820 88%,
+    #d4920a 94%, #a86a00 100%
+  );
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 12px;
+  overflow: hidden;
+}
+
+/* Red Kodak-style accent stripe */
+.pf-film-can-v-stripe {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 24px;
+  background: linear-gradient(to right,
+    #6a0800 0%, #b01200 8%, #d41800 18%, #e01a00 50%,
+    #d41800 82%, #b01200 92%, #6a0800 100%
+  );
+  box-shadow: 0 2px 0 rgba(0,0,0,.3), inset 0 1px 0 rgba(255,80,30,.25);
+}
+.pf-film-can-v-stripe::after {
+  content: 'FILM'; position: absolute;
+  inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Courier New', monospace; font-size: 7px; font-weight: 900;
+  letter-spacing: .35em; color: rgba(255,255,255,.55);
+}
+
+/* Text inside label */
+.pf-film-can-v-brand {
+  font-family: 'Courier New', monospace; font-size: 6.5px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: rgba(10,5,0,.65);
+  position: relative; z-index: 1;
+}
+.pf-film-can-v-iso {
+  font-family: 'Courier New', monospace; font-size: 30px; font-weight: 900;
+  color: rgba(8,4,0,.82); line-height: 1; letter-spacing: -.04em;
+  position: relative; z-index: 1;
+}
+.pf-film-can-v-detail {
+  font-family: 'Courier New', monospace; font-size: 6px;
+  color: rgba(10,5,0,.5); letter-spacing: .08em;
+  position: relative; z-index: 1;
+}
+
+/* Film exit slot on right edge */
+.pf-film-can-v-slot {
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 5px; height: 30%;
+  background: #020100;
+  z-index: 4;
+  border-radius: 2px 0 0 2px;
+  box-shadow: inset -3px 0 5px rgba(0,0,0,1);
+}
+
+/* Cylinder 3D gloss overlay */
+.pf-film-can-v-gloss {
+  position: absolute; inset: 0; pointer-events: none; z-index: 3;
+  background: linear-gradient(to right,
+    rgba(255,255,255,.32) 0%,
+    rgba(255,255,255,.10) 18%,
+    transparent 35%,
+    transparent 65%,
+    rgba(0,0,0,.08) 80%,
+    rgba(0,0,0,.32) 100%
+  );
+}
+
+/* Horizontal film strip body */
+.pf-fstrip {
+  flex: 1;
+  background: #060402;
+  border-radius: 0 6px 6px 0;
+  border: 1px solid rgba(255,255,255,.08);
+  border-left: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+}
+
+/* Scroll hint — fades out when user reaches the end */
+.pf-fstrip-scroll-hint {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 72px;
+  background: linear-gradient(to right, transparent, rgba(6,4,2,.92));
+  pointer-events: none;
+  z-index: 10;
+}
+.pf-fstrip-scroll-hint::after {
+  content: '›';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  line-height: 1;
+  color: rgba(216,169,120,.65);
 }
 
 /* Sprocket perforation row */
 .pf-fstrip-perf {
-  background: #030201;
-  padding: 6px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.05);
+  background: linear-gradient(to bottom, #2d1a08, #3a2210);
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(0,0,0,.6);
+  overflow: hidden;
 }
-.pf-fstrip-perf:last-child { border-bottom: none; border-top: 1px solid rgba(255,255,255,.05) }
+.pf-fstrip-perf:last-child {
+  border-bottom: none;
+  border-top: 1px solid rgba(0,0,0,.6);
+  background: linear-gradient(to top, #2d1a08, #3a2210);
+}
 .pf-fstrip-perf-holes {
-  display: flex; gap: 10px; overflow: hidden; height: 16px; align-items: center;
+  display: flex; gap: 8px; overflow: hidden; height: 16px; align-items: center; padding: 0 8px;
 }
 .pf-fstrip-perf-holes span {
-  flex: 0 0 22px; height: 13px;
-  border: 1.5px solid rgba(255,255,255,.2);
-  border-radius: 3px; background: #030201;
-  box-shadow: inset 0 0 4px rgba(0,0,0,.8);
+  flex: 0 0 20px; height: 12px; border-radius: 2px;
+  background: #060402;
+  border: 1.5px solid rgba(255,255,255,.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 0 6px rgba(0,0,0,.8);
 }
 
 /* Content track */
@@ -330,8 +483,7 @@
   justify-content: center; gap: 10px;
   padding: 24px 20px;
   border-right: 2px solid rgba(255,255,255,.06);
-  flex: 0 0 80px; background: #040302;
-  position: relative;
+  flex: 0 0 80px; background: #040302; position: relative;
 }
 .pf-fstrip-slate::after {
   content: ''; position: absolute; right: 0; top: 20%; bottom: 20%;
@@ -356,8 +508,7 @@
   padding: 24px 28px; position: relative;
   border-right: 1px solid rgba(255,255,255,.05);
   flex: 0 0 auto; min-width: 96px;
-  transition: background .3s;
-  cursor: default;
+  transition: background .3s; cursor: default;
 }
 .pf-fstrip-frame:hover { background: rgba(216,169,120,.07) }
 .pf-fstrip-frame:hover .pf-fstrip-name { color: rgba(232,201,160,1) }
@@ -368,12 +519,9 @@
   font-family: 'Courier New', monospace; font-size: 9px; font-weight: 700;
   color: rgba(255,255,255,.15); letter-spacing: .1em;
 }
-
 .pf-fstrip-icon {
-  transition: transform .35s cubic-bezier(0.22,1,0.36,1), filter .35s;
-  line-height: 0;
+  transition: transform .35s cubic-bezier(0.22,1,0.36,1), filter .35s; line-height: 0;
 }
-
 .pf-fstrip-name {
   font-family: var(--font-mulish), sans-serif; font-size: 11px; font-weight: 600;
   color: rgba(232,201,160,.55); letter-spacing: .06em;
@@ -696,8 +844,8 @@
 
 .ls-pol-cap {
   text-align: center; margin-top: 10px;
-  font-family: var(--font-mulish), sans-serif;
-  font-size: 11px; color: #6b503a; letter-spacing: .04em;
+  font-family: var(--font-handwrite), cursive;
+  font-size: 19px; font-weight: 600; color: #5a3e28; letter-spacing: .01em;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
@@ -920,8 +1068,6 @@
 .pf-lb-top { top: 0 }
 .pf-lb-bottom { bottom: 0 }
 
-/* Parallax photo — extra height so translateY has room */
-.pf-hero-photo { height: 130% !important; top: -15% !important }
 
 .pf-film-fade-r { display: none }
 .pf-film-hint { display: none }
